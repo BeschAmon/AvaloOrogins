@@ -15,148 +15,103 @@
     xmlns:avalonDock="https://github.com/Dirkster99/AvalonDock"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TestApp"
-    xmlns:winformsIntegration="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
-    Title="AvalonOrigin"
-    Width="525"
-    Height="350"
+    Title="Торговая платформа"
+    Width="1200"
+    Height="800"
     UseLayoutRounding="True">
-    <Grid x:Name="layoutRoot">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="9*"/>
-            <ColumnDefinition Width="122*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Menu Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,35">
-            <MenuItem Header="Edit">
-                <MenuItem Command="Undo" />
-                <MenuItem Command="Redo" />
-                <Separator />
-                <MenuItem Command="Cut" />
-                <MenuItem Command="Copy" />
-                <MenuItem Command="Paste" />
-            </MenuItem>
-            <MenuItem Header="Layout">
-                <MenuItem Header="Save">
-                    <MenuItem Click="OnSaveLayout" Header="Layout_1" />
-                    <MenuItem Click="OnSaveLayout" Header="Layout_2" />
-                    <MenuItem Click="OnSaveLayout" Header="Layout_3" />
-                    <MenuItem Click="OnSaveLayout" Header="Layout_4" />
-                </MenuItem>
-                <MenuItem Header="Load">
-                    <MenuItem Click="OnLoadLayout" Header="Layout_1" />
-                    <MenuItem Click="OnLoadLayout" Header="Layout_2" />
-                    <MenuItem Click="OnLoadLayout" Header="Layout_3" />
-                    <MenuItem Click="OnLoadLayout" Header="Layout_4" />
-                </MenuItem>
-                <MenuItem Click="OnDumpToConsole" Header="Dump To Console" />
-                <MenuItem Click="OnUnloadManager" Header="Unload Manager" />
-                <MenuItem Click="OnLoadManager" Header="Load Manager" />
-                <MenuItem Click="OnShowHeader" Header="Show header" />
-            </MenuItem>
-            <MenuItem Header="Tools">
-                <MenuItem Click="OnShowWinformsWindow" Header="WinForms Window" />
-                <MenuItem Click="OnShowToolWindow1" Header="Tool Window1" />
-                <MenuItem Click="OnNewFloatingWindow" Header="New floating window" />
-            </MenuItem>
-        </Menu>
+	<Grid x:Name="layoutRoot">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
 
-        <DockingManager x:Name="dockManager"
+		<Menu Grid.Row="0">
+			<MenuItem Header="Файл">
+				<MenuItem Header="Сохранить раскладку" Click="OnSaveLayout"/>
+				<MenuItem Header="Загрузить раскладку" Click="OnLoadLayout"/>
+				<Separator/>
+				<MenuItem Header="Выход" Click="OnExit"/>
+			</MenuItem>
+			<MenuItem Header="Вид">
+				<MenuItem Header="Заявка" Click="OnShowPanel"/>
+				<MenuItem Header="Стакан" Click="OnShowPanel"/>
+				<MenuItem Header="Обезличенные сделки" Click="OnShowPanel"/>
+				<MenuItem Header="График" Click="OnShowPanel"/>
+				<MenuItem Header="Портфель" Click="OnShowPanel"/>
+				<MenuItem Header="Активные заявки" Click="OnShowPanel"/>
+				<MenuItem Header="История операций" Click="OnShowPanel"/>
+				<MenuItem Header="Инструменты" Click="OnShowPanel"/>
+				<MenuItem Header="Консоль" Click="OnShowPanel"/>
+				<MenuItem Header="Уведомления" Click="OnShowPanel"/>
+			</MenuItem>
+		</Menu>
+
+		<avalonDock:DockingManager x:Name="dockManager" Grid.Row="1"
             AllowMixedOrientation="True"
             AutoWindowSizeWhenOpened="True"
-            DocumentClosing="DockManager_DocumentClosing"
-            IsVirtualizingAnchorable="True"
-            IsVirtualizingDocument="True" Grid.ColumnSpan="2" Margin="0,18,0,0" Grid.RowSpan="2">
-            <DockingManager.Theme>
-                <Vs2013LightTheme />
-            </DockingManager.Theme>
-            <DockingManager.DocumentHeaderTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Margin="0,0,4,0" Source="{Binding IconSource}" />
-                        <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
-                    </StackPanel>
-                </DataTemplate>
-            </DockingManager.DocumentHeaderTemplate>
-            <LayoutRoot PropertyChanged="OnLayoutRootPropertyChanged">
-                <LayoutPanel Orientation="Horizontal">
-                    <LayoutAnchorablePane DockWidth="50">
-                        <LayoutAnchorable x:Name="WinFormsWindow"
-                            Title="WinForms Window"
-                            CanClose="False"
-                            CanHide="False"
-                            ContentId="WinFormsWindow"
-                            ToolTip="My WinForms Tool">
-                            <winformsIntegration:WindowsFormsHost x:Name="winFormsHost" Background="White" />
-                        </LayoutAnchorable>
-                    </LayoutAnchorablePane>
-                    <LayoutDocumentPaneGroup>
-                        <LayoutDocumentPane x:Name="LayoutDocumentPane">
-                            <LayoutDocument
-                                Title="Document 1"
-                                ContentId="document1"
-                                IconSource="/TestApp;component/Images/alarm-clock-blue.png">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <Button
-                                        Height="28"
-                                        VerticalAlignment="Top"
-                                        Click="AddTwoDocuments_click"
-                                        Content="Click to add 2 documents" />
-                                    <TextBox Grid.Row="1" Text="Document 1 Content" />
-                                </Grid>
-                            </LayoutDocument>
-                            <LayoutDocument Title="Document 2" ContentId="document2">
-                                <TextBox
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    Foreground="White"
-                                    Text="{Binding TestTimer, Mode=OneWay, StringFormat='Document 2 Attached to Timer ->\{0\}'}" />
-                            </LayoutDocument>
-                        </LayoutDocumentPane>
-                    </LayoutDocumentPaneGroup>
-                    <LayoutAnchorablePaneGroup DockWidth="50">
-                        <LayoutAnchorablePane>
-                            <LayoutAnchorable
-                                Title="Tool Window 1"
-                                ContentId="toolWindow1"
-                                Hiding="OnToolWindow1Hiding">
-                                <StackPanel MinHeight="450">
-                                    <local:TestUserControl />
-                                    <TextBox Text="{Binding TestTimer, Mode=OneWay, StringFormat='Tool Window 1 Attached to Timer ->\{0\}'}" />
-                                </StackPanel>
-                            </LayoutAnchorable>
-                            <LayoutAnchorable Title="Tool Window 2" ContentId="toolWindow2">
-                                <TextBlock Text="{Binding FocusedElement}" />
-                            </LayoutAnchorable>
-                        </LayoutAnchorablePane>
-                    </LayoutAnchorablePaneGroup>
-                </LayoutPanel>
+            DocumentClosing="DockManager_DocumentClosing">
+			<avalonDock:DockingManager.Theme>
+				<avalonDock:Vs2013LightTheme/>
+			</avalonDock:DockingManager.Theme>
 
-                <LayoutRoot.LeftSide>
-                    <LayoutAnchorSide>
-                        <LayoutAnchorGroup>
-                            <LayoutAnchorable
-                                Title="AutoHide1 Content"
-                                ContentId="AutoHide1Content"
-                                IconSource="/TestApp;component/Images/address-book--pencil.png">
-                                <TextBox Text="{Binding TestTimer, Mode=OneWay, StringFormat='AutoHide Attached to Timer ->\{0\}'}" />
-                            </LayoutAnchorable>
-                            <LayoutAnchorable Title="AutoHide2 Content" ContentId="AutoHide2Content">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBox />
-                                    <TextBox />
-                                </StackPanel>
-                            </LayoutAnchorable>
-                        </LayoutAnchorGroup>
-                    </LayoutAnchorSide>
-                </LayoutRoot.LeftSide>
-            </LayoutRoot>
-        </DockingManager>
-    </Grid>
+			<avalonDock:LayoutRoot>
+				<avalonDock:LayoutPanel Orientation="Vertical">
+					<!-- Основное содержимое -->
+					<avalonDock:LayoutPanel Orientation="Horizontal">
+						<!-- Левая панель (250px) -->
+						<avalonDock:LayoutAnchorablePaneGroup DockWidth="250">
+							<avalonDock:LayoutAnchorablePane>
+								<avalonDock:LayoutAnchorable Title="Портфель" ContentId="PortfolioPane">
+									<Grid x:Name="PortfolioGrid"/>
+								</avalonDock:LayoutAnchorable>
+								<avalonDock:LayoutAnchorable Title="Инструменты" ContentId="InstrumentsPane">
+									<Grid x:Name="InstrumentsGrid"/>
+								</avalonDock:LayoutAnchorable>
+								<avalonDock:LayoutAnchorable Title="Обезличенные сделки" ContentId="TradesPane">
+									<Grid x:Name="TradesGrid"/>
+								</avalonDock:LayoutAnchorable>
+							</avalonDock:LayoutAnchorablePane>
+						</avalonDock:LayoutAnchorablePaneGroup>
+
+						<!-- Центральная область (График) -->
+						<avalonDock:LayoutDocumentPaneGroup>
+							<avalonDock:LayoutDocumentPane>
+								<avalonDock:LayoutAnchorable Title="График" ContentId="ChartDocument">
+									<Grid x:Name="ChartGrid"/>
+								</avalonDock:LayoutAnchorable>
+							</avalonDock:LayoutDocumentPane>
+						</avalonDock:LayoutDocumentPaneGroup>
+
+						<!-- Правая панель (300px) -->
+						<avalonDock:LayoutAnchorablePaneGroup DockWidth="300">
+							<avalonDock:LayoutAnchorablePane>
+								<avalonDock:LayoutAnchorable Title="История операций" ContentId="HistoryPane">
+									<Grid x:Name="HistoryGrid"/>
+								</avalonDock:LayoutAnchorable>
+								<avalonDock:LayoutAnchorable Title="Активные заявки" ContentId="ActiveOrdersPane">
+									<Grid x:Name="ActiveOrdersGrid"/>
+								</avalonDock:LayoutAnchorable>
+								<avalonDock:LayoutAnchorable Title="Заявка" ContentId="OrderPane">
+									<Grid x:Name="OrderGrid"/>
+								</avalonDock:LayoutAnchorable>
+								<avalonDock:LayoutAnchorable Title="Стакан" ContentId="OrderBookPane">
+									<Grid x:Name="OrderBookGrid"/>
+								</avalonDock:LayoutAnchorable>
+							</avalonDock:LayoutAnchorablePane>
+						</avalonDock:LayoutAnchorablePaneGroup>
+					</avalonDock:LayoutPanel>
+
+					<!-- Нижняя панель (150px) -->
+					<avalonDock:LayoutAnchorablePane DockHeight="150" DockMinHeight="100">
+						<avalonDock:LayoutAnchorable Title="Консоль" ContentId="ConsolePane">
+							<Grid x:Name="ConsoleGrid"/>
+						</avalonDock:LayoutAnchorable>
+						<avalonDock:LayoutAnchorable Title="Уведомления" ContentId="NotificationsPane">
+							<Grid x:Name="NotificationsGrid"/>
+						</avalonDock:LayoutAnchorable>
+					</avalonDock:LayoutAnchorablePane>
+				</avalonDock:LayoutPanel>
+			</avalonDock:LayoutRoot>
+		</avalonDock:DockingManager>
+	</Grid>
 </Window>
